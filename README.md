@@ -17,7 +17,7 @@ NguyenMinhThao_23001936/
 │   ├── bai1.php
 │   ├── bai2.php
 │   ├── bai3.php
-│   └── bai4.php
+│   └── ...
 ├── TH2/
 │   └── ...
 ├── TH3/

@@ -1,0 +1,134 @@
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #eef2fa 0%, #dfe7f5 100%);
+    min-height: 100vh;
+}
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px);
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(30, 60, 120, 0.15);
+    padding: 36px 32px;
+    box-sizing: border-box;
+}
+
+.auth-title {
+    text-align: center;
+    margin: 0 0 6px;
+    color: #2c3e50;
+    font-size: 26px;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #7f8c9b;
+    font-size: 14px;
+    margin: 0 0 22px;
+}
+
+.auth-form p {
+    margin: 0 0 16px;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #34495e;
+    font-size: 14px;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #cfd8e3;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+    outline: none;
+    background: #fbfcfe;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.auth-form input:focus {
+    border-color: #4a90d9;
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.15);
+    background: #ffffff;
+}
+
+.password-wrap {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.password-wrap input {
+    padding-right: 40px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #4a90d9;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-submit:hover {
+    background: #3a7bc8;
+}
+
+.auth-footer {
+    text-align: center;
+    margin: 18px 0 0;
+    color: #7f8c9b;
+    font-size: 14px;
+}
+
+.auth-link {
+    color: #4a90d9;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+.auth-msg {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.auth-success {
+    background: #e6f7ed;
+    color: #1e7e46;
+    border: 1px solid #b5e6c9;
+}
+
+.auth-error {
+    background: #fdecec;
+    color: #b32424;
+    border: 1px solid #f3c1c1;
+}

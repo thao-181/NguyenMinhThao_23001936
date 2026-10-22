@@ -1,9 +1,7 @@
 <?php
-// Khai báo tên và điểm của học sinh
 $name = "Nguyễn Minh Thao";
 $score = 8.5;
 
-// Xếp loại học sinh
 if ($score >= 8) {
     $classification = "Giỏi";
 } elseif ($score >= 6.5) {

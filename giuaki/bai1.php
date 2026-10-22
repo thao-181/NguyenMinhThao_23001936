@@ -1,6 +1,6 @@
 <?php
 // Khai báo tên và điểm của học sinh
-$name = "Nguyễn Văn An";
+$name = "Nguyễn Minh Thao";
 $score = 8.5;
 
 // Xếp loại học sinh
@@ -14,7 +14,6 @@ if ($score >= 8) {
     $classification = "Yếu";
 }
 
-// Hiển thị kết quả
 echo "<h2>Kết quả xếp loại học sinh</h2>";
 echo "Họ và tên: " . $name . "<br>";
 echo "Điểm: " . $score . "<br>";

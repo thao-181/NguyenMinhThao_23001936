@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài thực hành VueJS - Ứng dụng quản lý công việc cá nhân">
+  <title>Quản lý công việc | VueJS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app" class="page-shell">
+    <section class="todo-app" aria-labelledby="page-title">
+      <header class="app-header">
+        <div class="date-mark" aria-hidden="true">
+          <span>THU</span>
+          <strong>29</strong>
+        </div>
+        <div class="heading-copy">
+          <p class="eyebrow">Kế hoạch trong ngày</p>
+          <h1 id="page-title">Một ngày thật hiệu quả.</h1>
+          <p>Chia nhỏ mục tiêu, hoàn thành từng việc một.</p>
+        </div>
+        <div class="progress-ring" v-bind:style="progressStyle" v-bind:aria-label="progressText">
+          <span>{{ completionPercent }}%</span>
+        </div>
+      </header>
+
+      <section class="stats" aria-label="Thống kê công việc">
+        <article>
+          <span class="stat-icon blue" aria-hidden="true">◇</span>
+          <div><strong>{{ totalTasks }}</strong><span>Tổng công việc</span></div>
+        </article>
+        <article>
+          <span class="stat-icon amber" aria-hidden="true">◷</span>
+          <div><strong>{{ remainingTasks }}</strong><span>Chưa hoàn thành</span></div>
+        </article>
+        <article>
+          <span class="stat-icon green" aria-hidden="true">✓</span>
+          <div><strong>{{ completedTasks }}</strong><span>Đã hoàn thành</span></div>
+        </article>
+      </section>
+
+      <form class="add-task" v-on:submit.prevent="addTask">
+        <span class="add-icon" aria-hidden="true">＋</span>
+        <label class="sr-only" for="new-task">Tên công việc mới</label>
+        <input
+          id="new-task"
+          ref="taskInput"
+          v-model="newTaskName"
+          type="text"
+          placeholder="Thêm một công việc mới..."
+          autocomplete="off"
+        >
+        <button type="submit" v-bind:disabled="!canAddTask">Thêm</button>
+      </form>
+      <p v-if="showInputError" class="input-error">Vui lòng nhập tên công việc hợp lệ.</p>
+
+      <div class="toolbar">
+        <div class="filters" role="group" aria-label="Lọc công việc">
+          <button
+            v-for="option in filterOptions"
+            v-bind:key="option.value"
+            type="button"
+            v-bind:class="{ active: currentFilter === option.value }"
+            v-on:click="currentFilter = option.value"
+          >
+            {{ option.label }}
+            <span>{{ filterCount(option.value) }}</span>
+          </button>
+        </div>
+        <button
+          class="clear-completed"
+          type="button"
+          v-on:click="clearCompleted"
+          v-bind:disabled="completedTasks === 0"
+        >
+          Xóa việc đã xong
+        </button>
+      </div>
+
+      <div v-if="filteredTasks.length" class="task-list">
+        <article
+          v-for="task in filteredTasks"
+          v-bind:key="task.id"
+          class="task-item"
+          v-bind:class="{ completed: task.completed }"
+        >
+          <label class="task-check">
+            <input v-model="task.completed" type="checkbox">
+            <span aria-hidden="true">✓</span>
+            <span class="sr-only">Đánh dấu {{ task.name }} là hoàn thành</span>
+          </label>
+
+          <div class="task-content">
+            <h2>{{ task.name }}</h2>
+            <p>{{ task.completed ? 'Đã hoàn thành' : 'Đang thực hiện' }}</p>
+          </div>
+
+          <span class="task-number">#{{ String(task.id).padStart(2, '0') }}</span>
+          <button
+            class="delete-task"
+            type="button"
+            v-on:click.stop="deleteTask(task.id)"
+            v-bind:aria-label="'Xóa công việc ' + task.name"
+            title="Xóa công việc"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/>
+            </svg>
+          </button>
+        </article>
+      </div>
+
+      <section v-else class="empty-state" aria-live="polite">
+        <div class="empty-illustration" aria-hidden="true">
+          <span>✓</span>
+        </div>
+        <template v-if="totalTasks === 0">
+          <h2>Danh sách đang trống</h2>
+          <p>Hãy thêm công việc đầu tiên để bắt đầu một ngày hiệu quả.</p>
+        </template>
+        <template v-else>
+          <h2>Không có kết quả phù hợp</h2>
+          <p>Không có công việc nào trong nhóm “{{ activeFilterLabel }}”.</p>
+        </template>
+      </section>
+
+      <footer class="app-footer">
+        <span>{{ progressText }}</span>
+        <span>Dữ liệu được cập nhật tức thì</span>
+      </footer>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

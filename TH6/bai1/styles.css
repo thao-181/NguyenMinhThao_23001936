@@ -1,0 +1,397 @@
+:root {
+  --ink: #17223b;
+  --muted: #697386;
+  --line: #e9edf5;
+  --paper: #ffffff;
+  --navy: #183153;
+  --blue: #3d6ff2;
+  --sky: #eaf1ff;
+  --mint: #18a273;
+  --shadow: 0 24px 70px rgba(36, 56, 92, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  font-family: "Be Vietnam Pro", system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 9% 14%, rgba(81, 127, 255, 0.16) 0 10%, transparent 28%),
+    radial-gradient(circle at 90% 86%, rgba(46, 196, 153, 0.13) 0 10%, transparent 29%),
+    #f5f7fc;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.page-shell {
+  width: min(1040px, calc(100% - 40px));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 56px 0;
+  
+  gap: 28px;
+  align-items: center;
+}
+
+.student-card,
+.control-panel {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.student-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 34px;
+}
+
+.card-accent {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 7px;
+  background: linear-gradient(90deg, var(--blue), #7065f2, #33c7a2);
+}
+
+.card-header,
+.student-profile,
+.intro-toggle,
+.switch-row,
+.score-control {
+  display: flex;
+  align-items: center;
+}
+
+.card-header {
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 7px;
+  color: var(--blue);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.card-header h1,
+.control-heading h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 1.25rem;
+}
+
+.student-code {
+  padding: 9px 13px;
+  color: var(--blue);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--sky);
+  border-radius: 999px;
+}
+
+.student-profile {
+  gap: 22px;
+  padding: 34px 0 29px;
+}
+
+.avatar-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.avatar {
+  width: 108px;
+  height: 108px;
+  display: block;
+  object-fit: cover;
+  border: 5px solid #fff;
+  border-radius: 27px;
+  box-shadow: 0 12px 26px rgba(56, 83, 135, 0.2);
+}
+
+.status-dot {
+  position: absolute;
+  right: -3px;
+  bottom: 6px;
+  width: 19px;
+  height: 19px;
+  background: #1fbe87;
+  border: 4px solid #fff;
+  border-radius: 50%;
+}
+
+.status-dot.offline {
+  background: #aeb6c7;
+}
+
+.identity-label,
+.class-name,
+.stat-label,
+.control-heading p {
+  color: var(--muted);
+}
+
+.identity-label {
+  margin: 0 0 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.identity h2 {
+  margin: 0 0 9px;
+  color: var(--navy);
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
+  line-height: 1.25;
+}
+
+.class-name {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.class-name strong {
+  color: var(--ink);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-item {
+  min-height: 88px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  background: #f7f9fd;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--blue);
+  font-size: 1.2rem;
+  background: #e8efff;
+  border-radius: 12px;
+}
+
+.stat-label,
+.stat-value {
+  margin: 0;
+}
+
+.stat-label {
+  margin-bottom: 3px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  color: var(--navy);
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+.rank-excellent { color: #0c9b6c; }
+.rank-good { color: #3566e8; }
+.rank-average { color: #c27a0a; }
+.rank-fail { color: #df4c59; }
+
+.study-status {
+  width: fit-content;
+  margin: 20px 0 5px;
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #087650;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: #e5f8f1;
+  border-radius: 999px;
+}
+
+.study-status.inactive {
+  color: #6c7484;
+  background: #eef0f4;
+}
+
+.status-pulse {
+  width: 7px;
+  height: 7px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.intro-toggle {
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px 0 10px;
+  justify-content: space-between;
+  color: var(--navy);
+  font-weight: 700;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.toggle-icon {
+  font-size: 1.35rem;
+  transition: transform 180ms ease;
+}
+
+.toggle-icon.open {
+  transform: rotate(180deg);
+}
+
+.intro p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.control-panel {
+  padding: 30px;
+  border-radius: 24px;
+}
+
+.control-heading {
+  margin-bottom: 26px;
+}
+
+.control-heading p:last-child {
+  margin: 11px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.field {
+  display: block;
+  margin-top: 18px;
+}
+
+.field > span,
+.switch-row strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--navy);
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.field input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  color: var(--ink);
+  background: #f8f9fc;
+  border: 1px solid #dfe4ee;
+  border-radius: 11px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.field input[type="text"]:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(61, 111, 242, 0.12);
+}
+
+.score-control {
+  gap: 14px;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+output {
+  min-width: 50px;
+  padding: 8px 9px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-align: center;
+  background: var(--navy);
+  border-radius: 9px;
+}
+
+.switch-row {
+  margin-top: 24px;
+  padding-top: 22px;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.switch-row strong {
+  margin: 0 0 4px;
+}
+
+.switch-row small {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.switch-row input {
+  width: 45px;
+  height: 24px;
+  flex: 0 0 auto;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+
+@media (max-width: 780px) {
+  .page-shell {
+    width: min(560px, calc(100% - 28px));
+    padding: 28px 0;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 470px) {
+  .student-card,
+  .control-panel {
+    padding: 24px;
+    border-radius: 22px;
+  }
+
+  .card-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .student-profile {
+    align-items: flex-start;
+  }
+
+  .avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 23px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

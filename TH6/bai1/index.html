@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài thực hành VueJS - Thẻ thông tin sinh viên">
+  <title>Thẻ thông tin sinh viên | VueJS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app" class="page-shell">
+    <section class="student-card" aria-labelledby="student-name">
+      <div class="card-accent" aria-hidden="true"></div>
+
+      <header class="card-header">
+        <div>
+          <p class="eyebrow">Hồ sơ sinh viên</p>
+          <h1>Thông tin học tập</h1>
+        </div>
+        <span class="student-code">{{ student.id }}</span>
+      </header>
+
+      <div class="student-profile">
+        <div class="avatar-wrap">
+          <img
+            class="avatar"
+            v-bind:src="student.avatar"
+            v-bind:alt="'Ảnh đại diện của ' + student.fullName"
+          >
+          <span class="status-dot" v-bind:class="{ offline: !student.isStudying }" aria-hidden="true"></span>
+        </div>
+
+        <div class="identity">
+          <p class="identity-label">Sinh viên</p>
+          <h2 id="student-name">{{ student.fullName }}</h2>
+          <p class="class-name">Lớp <strong v-text="student.className"></strong></p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-item">
+          <span class="stat-icon" aria-hidden="true">✦</span>
+          <div>
+            <p class="stat-label">Điểm trung bình</p>
+            <p class="stat-value">{{ formattedScore }}</p>
+          </div>
+        </article>
+
+        <article class="stat-item">
+          <span class="stat-icon" aria-hidden="true">⌁</span>
+          <div>
+            <p class="stat-label">Xếp loại</p>
+            <p class="stat-value rank" v-bind:class="rankClass">{{ rank }}</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="study-status" v-bind:class="{ inactive: !student.isStudying }">
+        <span class="status-pulse" aria-hidden="true"></span>
+        <span v-if="student.isStudying">Đang học</span>
+        <span v-else>Đã nghỉ</span>
+      </div>
+
+      <button
+        class="intro-toggle"
+        type="button"
+        v-on:click="showIntro = !showIntro"
+        v-bind:aria-expanded="showIntro"
+      >
+        <span>{{ showIntro ? 'Ẩn phần giới thiệu' : 'Xem phần giới thiệu' }}</span>
+        <span class="toggle-icon" v-bind:class="{ open: showIntro }" aria-hidden="true">⌄</span>
+      </button>
+
+      <div class="intro" v-show="showIntro">
+        <p>{{ student.introduction }}</p>
+      </div>
+    </section>
+
+    
+  </main>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

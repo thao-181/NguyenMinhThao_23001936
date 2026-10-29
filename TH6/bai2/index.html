@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài thực hành VueJS - Giao diện đặt vé xem phim">
+  <title>Đặt vé xem phim | VueJS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app" class="booking-shell">
+    <section class="movie-panel" aria-labelledby="movie-title">
+      <div class="movie-poster" role="img" aria-label="Áp phích phim Hành tinh bí ẩn">
+        <span class="poster-kicker">A film by Lumina Studio</span>
+        <div class="planet" aria-hidden="true"></div>
+        <div class="poster-copy">
+          <p>Beyond the horizon</p>
+          <h1 id="movie-title">Hành tinh<br><em>bí ẩn</em></h1>
+        </div>
+        <div class="poster-meta">
+          <span>2D</span>
+          <span>128 phút</span>
+          <span>T13</span>
+        </div>
+      </div>
+
+      <div class="movie-info">
+        <p class="eyebrow">Đang chiếu</p>
+        <h2>Hành tinh bí ẩn</h2>
+        <p class="genre">Khoa học viễn tưởng · Phiêu lưu</p>
+        <div class="rating"><strong>9.2</strong><span>/ 10 điểm khán giả</span></div>
+      </div>
+    </section>
+
+    <section class="booking-card" aria-labelledby="booking-title">
+      <header class="booking-header">
+        <div>
+          <p class="eyebrow">Đặt vé trực tuyến</p>
+          <h2 id="booking-title">Chọn vé của bạn</h2>
+        </div>
+        <span class="step-badge">01</span>
+      </header>
+
+      <form v-on:submit.prevent="bookTickets" novalidate>
+        <label class="field full-field">
+          <span>Họ và tên <b>*</b></span>
+          <input
+            v-model.trim="form.customerName"
+            type="text"
+            placeholder="Ví dụ: Nguyễn Minh Thao"
+            autocomplete="name"
+          >
+        </label>
+
+        <label class="field full-field">
+          <span>Suất chiếu</span>
+          <select v-model="form.showtime">
+            <option v-for="show in showtimes" v-bind:key="show" v-bind:value="show">{{ show }}</option>
+          </select>
+        </label>
+
+        <fieldset class="ticket-types full-field">
+          <legend>Loại vé</legend>
+          <label
+            v-for="ticket in ticketTypes"
+            v-bind:key="ticket.value"
+            class="ticket-option"
+            v-bind:class="{ selected: form.ticketType === ticket.value }"
+          >
+            <input v-model="form.ticketType" type="radio" v-bind:value="ticket.value">
+            <span class="radio-mark" aria-hidden="true"></span>
+            <span class="ticket-name">
+              <strong>{{ ticket.label }}</strong>
+              <small>{{ ticket.description }}</small>
+            </span>
+            <b>{{ formatMoney(ticket.price) }}</b>
+          </label>
+        </fieldset>
+
+        <div class="quantity-row full-field">
+          <div>
+            <span class="field-title">Số lượng vé</span>
+            <small>Từ 1 đến 10 vé</small>
+          </div>
+          <div class="quantity-control">
+            <button type="button" v-on:click="decreaseQuantity" v-bind:disabled="form.quantity <= 1" aria-label="Giảm số lượng">−</button>
+            <input
+              v-model.number="form.quantity"
+              type="number"
+              min="1"
+              max="10"
+              step="1"
+              aria-label="Số lượng vé"
+            >
+            <button type="button" v-on:click="increaseQuantity" v-bind:disabled="form.quantity >= 10" aria-label="Tăng số lượng">+</button>
+          </div>
+        </div>
+        <p v-if="!isQuantityValid" class="error-message">Số lượng phải là số nguyên từ 1 đến 10.</p>
+
+        <label class="combo-option full-field" v-bind:class="{ selected: form.hasCombo }">
+          <input v-model="form.hasCombo" type="checkbox">
+          <span class="checkbox-mark" aria-hidden="true">✓</span>
+          <span class="combo-icon" aria-hidden="true">🍿</span>
+          <span>
+            <strong>Combo bắp nước</strong>
+            <small>01 bắp rang lớn + 02 nước ngọt</small>
+          </span>
+          <b>+45.000đ</b>
+        </label>
+
+        <div class="summary full-field">
+          <div>
+            <span>{{ form.quantity || 0 }} × {{ selectedTicket.label }}</span>
+            <b>{{ formatMoney(ticketSubtotal) }}</b>
+          </div>
+          <div>
+            <span>Combo bắp nước</span>
+            <b>{{ form.hasCombo ? formatMoney(comboPrice) : '—' }}</b>
+          </div>
+          <div class="summary-total">
+            <span>Tổng thanh toán</span>
+            <strong>{{ formatMoney(totalPrice) }}</strong>
+          </div>
+        </div>
+
+        <div class="form-actions full-field">
+          <button class="reset-button" type="button" v-on:click="resetForm">Đặt lại</button>
+          <button class="submit-button" type="submit" v-bind:disabled="!canSubmit">
+            <span>Đặt vé</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </form>
+
+      <section v-if="confirmation" class="confirmation" aria-live="polite" aria-labelledby="confirmation-title">
+        <div class="success-icon" aria-hidden="true">✓</div>
+        <div class="confirmation-content">
+          <p class="eyebrow">Đặt vé thành công</p>
+          <h3 id="confirmation-title">Cảm ơn, {{ confirmation.customerName }}!</h3>
+          <p>Vé của bạn đã được giữ chỗ. Vui lòng có mặt trước giờ chiếu 15 phút.</p>
+          <dl>
+            <div><dt>Suất chiếu</dt><dd>{{ confirmation.showtime }}</dd></div>
+            <div><dt>Loại vé</dt><dd>{{ confirmation.quantity }} × {{ confirmation.ticketLabel }}</dd></div>
+            <div><dt>Combo</dt><dd>{{ confirmation.hasCombo ? 'Có' : 'Không' }}</dd></div>
+            <div><dt>Tổng tiền</dt><dd>{{ formatMoney(confirmation.total) }}</dd></div>
+          </dl>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

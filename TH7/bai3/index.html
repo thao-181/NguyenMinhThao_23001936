@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài 3 Vue 3: giỏ hàng sử dụng props, sự kiện tùy chỉnh và computed.">
+  <title>Giỏ hàng | TH7 · Bài 3</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script defer src="components/DongGioHang.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main id="app" v-cloak>
+    <header class="page-header">
+      <div><p class="eyebrow">TH7 / BÀI 03 · VUE 3</p><h1>Giỏ hàng của bạn</h1><p>Điều chỉnh số lượng và kiểm tra các sản phẩm trong giỏ.</p></div>
+      <a href="../bai2/index.html">Danh mục sản phẩm ↗</a>
+    </header>
+
+    <div class="cart-layout">
+      <section class="panel" aria-labelledby="cart-title">
+        <div class="panel-heading"><h2 id="cart-title">Sản phẩm đã chọn</h2><span>{{ cart.length }} loại sản phẩm</span></div>
+        <div v-if="cart.length" class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">Sản phẩm</th><th scope="col" class="money">Đơn giá</th><th scope="col" class="quantity-heading">Số lượng</th><th scope="col" class="money">Thành tiền</th><th scope="col" class="action">Thao tác</th></tr></thead>
+            <tbody>
+              <!-- is="vue:..." giữ component đúng vị trí trong bảng HTML. -->
+              <tr is="vue:dong-gio-hang"
+                v-for="item in cart"
+                :key="item.id"
+                :id="item.id"
+                :ten="item.ten"
+                :don-gia="item.donGia"
+                :so-luong="item.soLuong"
+                @doi-so-luong="capNhatSoLuong"
+                @yeu-cau-xoa="xoaSanPham"
+              ></tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="empty-state" role="status"><span aria-hidden="true">◇</span><h2>Giỏ hàng trống</h2><p>Chưa có sản phẩm nào trong giỏ hàng.</p></div>
+        <p class="panel-footer">Số lượng mỗi sản phẩm từ 1 đến 99.</p>
+      </section>
+
+      <aside class="panel summary" aria-labelledby="summary-title">
+        <h2 id="summary-title">Tóm tắt giỏ hàng</h2>
+        <div class="summary-details" aria-live="polite" aria-atomic="true">
+          <p><span>Loại sản phẩm</span><strong>{{ cart.length }}</strong></p>
+          <p><span>Tổng số lượng</span><strong>{{ tongSoLuong }}</strong></p>
+          <div class="total"><span>Tổng tiền</span><strong>{{ dinhDangTien(tongTien) }}</strong></div>
+        </div>
+        <button class="checkout-button" type="button" :disabled="cart.length === 0" @click="thanhToan">Thanh toán</button>
+        <p class="checkout-note">Thanh toán minh họa, không thu tiền thực tế.</p>
+        <p class="summary-note">Tổng tiền được cập nhật khi bạn thay đổi số lượng hoặc xóa sản phẩm.</p>
+      </aside>
+    </div>
+    <p v-if="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
+    <p class="status" role="status">{{ statusMessage }}</p>
+    <footer>Bài tập thực hành Vue 3 <span>Tải lại trang để khôi phục giỏ hàng mẫu.</span></footer>
+  </main>
+  <noscript>Vui lòng bật JavaScript để sử dụng giỏ hàng.</noscript>
+</body>
+</html>

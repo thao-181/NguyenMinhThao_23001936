@@ -1,0 +1,57 @@
+* { box-sizing: border-box; }
+[v-cloak] { display: none; }
+body { margin: 0; background: #f3f6fa; color: #203047; font: 14px/1.6 "Segoe UI", Arial, sans-serif; }
+main { max-width: 1200px; padding: 44px 28px 24px; margin: auto; }
+h1, h2, p { margin: 0; }
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 30px; }
+.eyebrow { color: #32719b; font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 9px; }
+h1 { font-size: clamp(26px, 4vw, 36px); letter-spacing: -.8px; margin-bottom: 6px; }
+h2 { font-size: 18px; }
+.page-header p:last-child { color: #6a788b; }
+a { color: #28668f; text-decoration: none; white-space: nowrap; }
+a:hover { text-decoration: underline; }
+.cart-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
+.panel { background: #fff; border: 1px solid #dee6ef; border-radius: 12px; overflow: hidden; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 24px; }
+.panel-heading > span { color: #778599; font-size: 12px; }
+.table-scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; text-align: left; white-space: nowrap; }
+thead { background: #f7f9fc; color: #728095; font-size: 12px; }
+th, td { padding: 20px 14px; border-bottom: 1px solid #edf1f5; }
+th:first-child { padding-left: 24px; }
+tbody th { font-weight: 600; }
+.product-id { display: block; font-size: 11px; color: #8a97a8; font-weight: 400; }
+.product-name { display: block; font-size: 15px; }
+.money { text-align: right; font-variant-numeric: tabular-nums; }
+.subtotal { font-weight: 700; }
+.quantity-heading, .action { text-align: center; }
+button { font: inherit; cursor: pointer; border: 0; border-radius: 6px; }
+button:focus-visible, a:focus-visible { outline: 3px solid #8ac0e8; outline-offset: 3px; }
+.quantity-control { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.quantity-control button { width: 30px; height: 32px; background: #edf4fa; color: #28668f; font-size: 18px; }
+.quantity-control button:hover:not(:disabled) { background: #dcecf8; }
+.quantity-control button:disabled { background: #f1f3f6; color: #acb5c2; cursor: not-allowed; }
+.quantity-control span { min-width: 22px; text-align: center; font-variant-numeric: tabular-nums; }
+.delete-button { background: #fff0ee; color: #ad4841; padding: 5px 10px; }
+.delete-button:hover { background: #ffe2de; }
+.panel-footer { font-size: 12px; color: #7a8799; padding: 14px 24px; }
+.summary { padding: 24px; border-top: 3px solid #347ca7; }
+.summary h2 { margin-bottom: 24px; }
+.summary-details p { display: flex; justify-content: space-between; margin-bottom: 14px; }
+.summary-details p span { color: #6a788b; }
+.total { border-top: 1px solid #e4eaf1; margin-top: 22px; padding-top: 18px; }
+.total span { display: block; font-weight: 600; }
+.total strong { display: block; font-size: 30px; color: #28668f; margin-top: 4px; }
+.summary-note { color: #7a8799; font-size: 12px; margin-top: 18px; }
+.checkout-button { width: 100%; margin-top: 22px; padding: 12px 16px; background: #28668f; color: #fff; font-weight: 600; border-radius: 8px; }
+.checkout-button:hover:not(:disabled) { background: #1e5174; }
+.checkout-button:disabled { background: #e9edf2; color: #8894a4; cursor: not-allowed; }
+.checkout-note { margin-top: 8px; color: #7a8799; font-size: 12px; text-align: center; }
+.empty-state { text-align: center; padding: 44px 20px; border-top: 1px solid #edf1f5; }
+.empty-state > span { display: block; font-size: 48px; color: #7b9bb5; }
+.empty-state p { color: #7a8799; margin-top: 6px; }
+.error { color: #b43c36; margin-top: 16px; }
+.status { min-height: 24px; margin-top: 16px; color: #22734e; }
+footer { display: flex; justify-content: space-between; gap: 12px; color: #8390a2; border-top: 1px solid #dce4ee; padding-top: 18px; margin-top: 28px; font-size: 12px; }
+@media (max-width: 1000px) { .cart-layout { grid-template-columns: minmax(0, 1fr); } .summary { max-width: none; } }
+@media (max-width: 600px) { main { padding: 26px 16px; } .page-header, footer { flex-direction: column; align-items: flex-start; } .panel-heading { padding: 18px; flex-wrap: wrap; } }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài 1 thực hành Vue 3: quản lý sản phẩm, tìm kiếm và thống kê tồn kho.">
+  <title>Quản lý sản phẩm | TH7 · Bài 1</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main id="app" v-cloak>
+    <header class="page-header">
+      <div><p class="eyebrow">TH7 / BÀI 01 · VUE 3</p><h1>Quản lý sản phẩm</h1><p>Theo dõi danh sách và giá trị tồn kho của bạn.</p></div>
+      <span class="page-status" role="status"><span aria-hidden="true">●</span> {{ pageStatus }}</span>
+    </header>
+
+    <section class="stats" aria-label="Thống kê theo bộ lọc" aria-live="polite">
+      <article><p>Sản phẩm đang hiển thị</p><strong>{{ displayedCount }} <small>/ {{ totalProducts }}</small></strong><span>Kết quả theo bộ lọc hiện tại</span></article>
+      <article><p>Tổng giá trị tồn kho</p><strong>{{ formatCurrency(inventoryValue) }}</strong><span>Giá × số lượng tồn của các sản phẩm đang hiển thị</span></article>
+    </section>
+
+    <section class="panel" aria-labelledby="list-title">
+      <div class="section-heading"><div><h2 id="list-title">Danh sách sản phẩm</h2><p>Tìm kiếm, lọc và sắp xếp kết hợp.</p></div><button class="secondary" @click="resetFilters" type="button">Đặt lại bộ lọc</button></div>
+      <div class="filters">
+        <label class="search">Tìm theo tên<input v-model="keyword" type="search" placeholder="Nhập tên sản phẩm…" aria-describedby="keyword-message"></label>
+        <label>Danh mục<select v-model="selectedCategory"><option value="">Tất cả danh mục</option><option v-for="category in categories" :key="category" :value="category">{{ category }}</option></select></label>
+        <label>Sắp xếp theo giá<select v-model="sortOrder"><option value="">Thứ tự ban đầu</option><option value="asc">Giá tăng dần</option><option value="desc">Giá giảm dần</option></select></label>
+      </div>
+      <p id="keyword-message" class="hint" role="status">{{ keywordMessage }}</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th scope="col">ID</th><th scope="col">Tên sản phẩm</th><th scope="col">Danh mục</th><th scope="col" class="number">Giá</th><th scope="col" class="number">Tồn kho</th><th scope="col">Trạng thái</th><th scope="col" class="number">Giá trị tồn</th><th scope="col">Thao tác</th></tr></thead>
+          <tbody>
+            <tr v-for="product in filteredProducts" :key="product.id">
+              <td class="muted">#{{ product.id }}</td><th scope="row">{{ product.name }}</th><td>{{ product.category }}</td><td class="number">{{ formatCurrency(product.price) }}</td><td class="number">{{ product.stock }}</td>
+              <td><span class="badge" :class="product.stock > 0 ? 'in-stock' : 'out-stock'">{{ product.stock > 0 ? 'Còn hàng' : 'Hết hàng' }}</span></td>
+              <td class="number">{{ formatCurrency(product.price * product.stock) }}</td><td><button class="delete" type="button" @click="deleteProduct(product)" :aria-label="'Xóa ' + product.name">Xóa</button></td>
+            </tr>
+            <tr v-if="displayedCount === 0"><td colspan="8" class="empty"><strong>Không có sản phẩm phù hợp</strong><p>Thử thay đổi từ khóa hoặc danh mục, hoặc thêm sản phẩm mới.</p></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <footer class="table-footer">Hiển thị {{ displayedCount }} trên tổng số {{ totalProducts }} sản phẩm</footer>
+    </section>
+
+    <section class="panel" aria-labelledby="add-title">
+      <div class="section-heading"><div><h2 id="add-title">Thêm sản phẩm mới</h2><p>Nhập đầy đủ thông tin sản phẩm bên dưới.</p></div><span class="form-mark" aria-hidden="true">＋</span></div>
+      <form @submit.prevent="addProduct" novalidate>
+        <div class="form-grid">
+          <label>Tên sản phẩm<input v-model="newProduct.name" type="text" placeholder="Ví dụ: Tai nghe không dây" required></label>
+          <label>Giá (VNĐ)<input v-model="newProduct.price" type="number" min="0" step="any" placeholder="Ví dụ: 150000" required></label>
+          <div class="category-field">
+            <label for="product-category">Danh mục</label>
+            <select id="product-category" ref="productCategory" v-model="newProduct.category" required><option v-for="category in categories" :key="category" :value="category">{{ category }}</option></select>
+            <button class="add-category" type="button" @click="toggleCategoryForm" :aria-expanded="showCategoryForm" aria-controls="category-editor">{{ showCategoryForm ? 'Hủy thêm danh mục' : '＋ Thêm danh mục' }}</button>
+          </div>
+          <label>Số lượng tồn<input v-model="newProduct.stock" type="number" min="0" step="1" placeholder="Ví dụ: 10" required></label>
+        </div>
+        <div v-if="showCategoryForm" id="category-editor" class="category-editor">
+          <label for="category-name">Tên danh mục mới</label>
+          <div class="category-entry">
+            <input id="category-name" ref="categoryInput" v-model="newCategoryName" type="text" placeholder="Ví dụ: Thời trang" @keydown.enter.prevent="addCategory" :aria-invalid="Boolean(categoryError)" aria-describedby="category-error">
+            <button class="primary" type="button" @click="addCategory">Lưu danh mục</button>
+          </div>
+          <p id="category-error" class="error" role="alert">{{ categoryError }}</p>
+        </div>
+        <p v-if="formError" class="error" role="alert">{{ formError }}</p>
+        <div class="form-footer"><span>Tên không rỗng · Giá &gt; 0 · Tồn kho nguyên ≥ 0</span><button class="primary" type="submit">＋ Thêm sản phẩm</button></div>
+      </form>
+    </section>
+    <p class="success" role="status">{{ successMessage }}</p>
+    <footer class="page-footer">Bài tập thực hành Vue 3 <span>Dữ liệu lưu trong phiên trang, tải lại để khôi phục dữ liệu mẫu.</span></footer>
+  </main>
+  <noscript>Vui lòng bật JavaScript để sử dụng trang quản lý sản phẩm.</noscript>
+</body>
+</html>

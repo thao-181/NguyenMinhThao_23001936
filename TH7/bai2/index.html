@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài 2 Vue 3: danh mục sản phẩm với component, props và trạng thái mô tả riêng.">
+  <title>Danh mục sản phẩm | TH7 · Bài 2</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Các script defer chạy theo thứ tự khai báo. -->
+  <script defer src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script defer src="components/TheSanPham.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main id="app" v-cloak>
+    <header class="page-header">
+      <div><p class="eyebrow">TH7 / BÀI 02 · VUE 3</p><h1>Một góc làm việc tốt hơn.</h1><p>Khám phá những món đồ dành cho học tập và công việc mỗi ngày.</p></div>
+      <a href="../bai1/index.html">Quản lý sản phẩm ↗</a>
+    </header>
+    <section aria-labelledby="catalog-title">
+      <div class="catalog-heading"><h2 id="catalog-title">Danh mục sản phẩm</h2><span>{{ products.length }} sản phẩm</span></div>
+      <div class="product-grid">
+        <the-san-pham
+          v-for="product in products"
+          :key="product.id"
+          :ten="product.ten"
+          :gia="product.gia"
+          :anh="product.anh"
+          :mo-ta="product.moTa"
+          :so-luong-ton="product.soLuongTon"
+        ></the-san-pham>
+      </div>
+    </section>
+    <footer>Bài tập thực hành Vue 3 <span>Mỗi sản phẩm có thể mở mô tả độc lập.</span></footer>
+  </main>
+  <noscript>Vui lòng bật JavaScript để xem danh mục sản phẩm.</noscript>
+</body>
+</html>

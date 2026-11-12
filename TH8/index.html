@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài thực hành 8: quản lý sản phẩm với PHP, MySQL và Vue.js.">
+  <title>Quản lý sản phẩm | TH8</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="vendor/vue.global.prod.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main id="app" v-cloak>
+    <header class="page-header">
+      <div><p class="eyebrow"></p><h1>Quản lý sản phẩm</h1><p class="muted">Thêm sản phẩm, cập nhật giá và theo dõi số lượng tồn.</p></div>
+      <span class="header-mark" aria-hidden="true">THAO</span>
+    </header>
+
+    <div v-if="errorMessage" class="notice error" role="alert">{{ errorMessage }}</div>
+    <div v-if="successMessage" class="notice success" role="status">{{ successMessage }}</div>
+
+    <div class="workspace">
+      <section class="panel product-panel" aria-labelledby="list-title" :aria-busy="loading">
+        <div class="section-heading">
+          <div><p class="eyebrow">KHO SẢN PHẨM</p><h2 id="list-title">Danh sách sản phẩm <span class="count">{{ products.length }}</span></h2></div>
+          <button type="button" class="secondary" @click="reloadProducts" :disabled="busy">{{ loading ? 'Đang tải…' : 'Tải lại' }}</button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">Tên sản phẩm</th><th scope="col" class="number">Đơn giá</th><th scope="col" class="number">Số lượng tồn</th><th scope="col" class="actions">Thao tác</th></tr></thead>
+            <tbody>
+              <tr v-if="loading"><td colspan="4" class="empty" role="status">Đang tải danh sách sản phẩm…</td></tr>
+              <template v-else>
+                <tr v-for="product in products" :key="product.id" :class="{ selected: editingId === product.id }">
+                  <th scope="row"><span class="product-name">{{ product.name }}</span><small class="product-id">#{{ product.id }}</small></th>
+                  <td class="number">{{ formatCurrency(product.price) }}</td>
+                  <td class="number"><span :class="['stock', { 'out-of-stock': product.stock === 0 }]">{{ product.stock === 0 ? 'Hết hàng · 0' : product.stock }}</span></td>
+                  <td class="actions"><div class="row-actions"><button type="button" class="edit" @click="editProduct(product)" :disabled="busy" :aria-label="'Sửa ' + product.name">Sửa</button><button type="button" class="delete" @click="deleteProduct(product)" :disabled="busy" :aria-label="'Xóa ' + product.name">{{ deletingId === product.id ? 'Đang xóa…' : 'Xóa' }}</button></div></td>
+                </tr>
+                <tr v-if="products.length === 0"><td colspan="4" class="empty">{{ listLoaded ? 'Chưa có sản phẩm. Thêm sản phẩm đầu tiên bằng biểu mẫu bên cạnh.' : 'Chưa tải được danh sách. Vui lòng kiểm tra kết nối và bấm Tải lại.' }}</td></tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+        <footer class="table-footer">{{ listLoaded ? products.length + ' sản phẩm trong danh sách' : 'Chưa có dữ liệu từ máy chủ' }}</footer>
+      </section>
+
+      <section class="panel form-panel" aria-labelledby="form-title">
+        <div class="section-heading"><div><p class="eyebrow">{{ editingId === null ? 'THÊM VÀO KHO' : 'SẢN PHẨM #' + editingId }}</p><h2 id="form-title">{{ editingId === null ? 'Thêm sản phẩm' : 'Sửa sản phẩm' }}</h2></div><span class="form-mark" aria-hidden="true">{{ editingId === null ? '+' : '↗' }}</span></div>
+        <form @submit.prevent="saveProduct" novalidate>
+          <fieldset :disabled="busy">
+            <label for="name">Tên sản phẩm <span class="required">*</span></label>
+            <input id="name" ref="nameInput" v-model="form.name" type="text" placeholder="Ví dụ: Bút bi" required aria-describedby="name-hint">
+            <small id="name-hint" class="field-hint">Từ 1 đến 100 ký tự, bỏ khoảng trắng hai đầu.</small>
+
+            <label for="price">Đơn giá <span class="required">*</span></label>
+            <div class="input-unit"><input id="price" v-model="form.price" type="number" min="1" max="2147483647" step="1" placeholder="Ví dụ: 5000" required><span>VNĐ</span></div>
+
+            <label for="stock">Số lượng tồn <span class="required">*</span></label>
+            <input id="stock" v-model="form.stock" type="number" min="0" max="2147483647" step="1" placeholder="Ví dụ: 20" required>
+            <small class="field-hint">Nhập 0 nếu sản phẩm đã hết hàng.</small>
+
+            <div class="form-actions"><button class="primary" type="submit">{{ saving ? 'Đang lưu…' : 'Lưu sản phẩm' }}</button><button v-if="editingId !== null" class="secondary" type="button" @click="resetForm">Hủy sửa</button></div>
+          </fieldset>
+        </form>
+      </section>
+    </div>
+    <footer class="page-footer"><span>Nguyễn Minh Thao · 23001936</span></footer>
+  </main>
+  <noscript>Vui lòng bật JavaScript để sử dụng trang quản lý sản phẩm.</noscript>
+</body>
+</html>
